@@ -1,0 +1,30 @@
+[
+  {
+    "name": "AgentMark",
+    "description": "Identify an agent consistently across a workflow.",
+    "props": { "agent": "Scout | Echo | Pilot" },
+    "example": "<AgentMark agent=\"Scout\" />"
+  },
+  {
+    "name": "StatusPill",
+    "description": "Show a review or availability state with a label and icon.",
+    "props": { "status": "Ready | In review | Approved | Declined" },
+    "example": "<StatusPill status=\"In review\" />"
+  },
+  {
+    "name": "AgentMessage",
+    "description": "Attribute a message to a named agent and its role.",
+    "props": { "agent": "Scout | Echo | Pilot", "children": "ReactNode" },
+    "example": "<AgentMessage agent=\"Scout\">The brief is ready.</AgentMessage>"
+  },
+  {
+    "name": "ReviewItem",
+    "description": "Let a reviewer approve or decline a proposed action.",
+    "props": {
+      "title": "string",
+      "status": "Ready | In review | Approved | Declined",
+      "onDecision": "(decision: 'Approved' | 'Declined') => void (optional)"
+    },
+    "example": "<ReviewItem title=\"Publish brief\" status={status} onDecision={setStatus} />"
+  }
+]
