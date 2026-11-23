@@ -1,14 +1,14 @@
 // Generated from src/tokens.css and figma/library.js
 const colors = {
-  "paper": "#f8f9f5",
+  "paper": "#f6f8fc",
   "surface": "#ffffff",
-  "ink": "#172e29",
-  "muted": "#566862",
-  "line": "#dce2da",
-  "pine": "#113e33",
-  "mint": "#b7efd5",
-  "violet": "#e9e3f4",
-  "sand": "#f4e9d6"
+  "ink": "#16213e",
+  "muted": "#53627c",
+  "line": "#d9e1ee",
+  "pine": "#1d3b72",
+  "mint": "#bfe8f7",
+  "violet": "#f3e4f5",
+  "sand": "#f9ead3"
 };
 // The build prepends colors from the shared token stylesheet.
 async function createLibrary() {

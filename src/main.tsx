@@ -27,8 +27,10 @@ import {
   AgentMark,
   AgentMessage,
   Brand,
+  FeedbackBar,
   ReviewItem,
   StatusPill,
+  type Feedback,
   type Status,
 } from "./components";
 import { TeamRoom, ReviewQueue } from "./Templates";
@@ -231,6 +233,7 @@ function Overview() {
 }
 function Components() {
   const [status, setStatus] = useState<Status>("In review");
+  const [rating, setRating] = useState<Feedback | undefined>(undefined);
   const samples = [
     <div className="inline">
       <AgentMark agent="Scout" />
@@ -246,6 +249,7 @@ function Components() {
       The release brief is ready for review.
     </AgentMessage>,
     <ReviewItem title="Publish brief" status={status} onDecision={setStatus} />,
+    <FeedbackBar value={rating} onRate={setRating} />,
   ];
   return (
     <div className="doc-stack">

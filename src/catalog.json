@@ -26,5 +26,14 @@
       "onDecision": "(decision: 'Approved' | 'Declined') => void (optional)"
     },
     "example": "<ReviewItem title=\"Publish brief\" status={status} onDecision={setStatus} />"
+  },
+  {
+    "name": "FeedbackBar",
+    "description": "Collect a quick Helpful or Needs work rating on an agent response.",
+    "props": {
+      "value": "'Helpful' | 'Needs work' (optional)",
+      "onRate": "(value: 'Helpful' | 'Needs work') => void (optional)"
+    },
+    "example": "<FeedbackBar value={rating} onRate={setRating} />"
   }
 ]

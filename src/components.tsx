@@ -5,6 +5,8 @@ import {
   Compass,
   GitPullRequest,
   ScanLine,
+  ThumbsDown,
+  ThumbsUp,
   Waves,
   X,
 } from "lucide-react";
@@ -85,6 +87,37 @@ export function ReviewItem({
         </div>
       )}
     </article>
+  );
+}
+export type Feedback = "Helpful" | "Needs work";
+export function FeedbackBar({
+  value,
+  onRate,
+}: {
+  value?: Feedback;
+  onRate?: (value: Feedback) => void;
+}) {
+  return (
+    <div className="feedback-bar" role="group" aria-label="Response feedback">
+      <button
+        type="button"
+        aria-pressed={value === "Helpful"}
+        className={value === "Helpful" ? "selected helpful" : ""}
+        onClick={() => onRate?.("Helpful")}
+      >
+        <ThumbsUp size={13} />
+        Helpful
+      </button>
+      <button
+        type="button"
+        aria-pressed={value === "Needs work"}
+        className={value === "Needs work" ? "selected needs-work" : ""}
+        onClick={() => onRate?.("Needs work")}
+      >
+        <ThumbsDown size={13} />
+        Needs work
+      </button>
+    </div>
   );
 }
 export function Brand() {

@@ -706,6 +706,35 @@ h1 {
   background: var(--pine);
   color: white;
 }
+.feedback-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.feedback-bar button {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  color: var(--muted);
+}
+.feedback-bar button.selected.helpful {
+  background: #d8eddd;
+  border-color: #9ec9ae;
+  color: #204f3d;
+}
+.feedback-bar button.selected.needs-work {
+  background: var(--violet);
+  border-color: #c8badc;
+  color: #533e6e;
+}
+.agent-turn .feedback-bar {
+  margin: 8px 0 0 44px;
+}
+.messages .agent-turn + .agent-turn,
+.messages .agent-turn + article,
+.messages article + .agent-turn {
+  margin-top: 18px;
+}
 .icon {
   padding: 7px;
   border-color: transparent;

@@ -4,11 +4,13 @@ import {
   AgentMark,
   AgentMessage,
   agents,
+  FeedbackBar,
   ReviewItem,
   type Agent,
+  type Feedback,
   type Status,
 } from "./components";
-type Message = { who: Agent | "You"; text: string };
+type Message = { who: Agent | "You"; text: string; rating?: Feedback };
 const firstMessages: Message[] = [
   {
     who: "Pilot",
@@ -52,7 +54,10 @@ export function TeamRoom() {
         (m) =>
           m &&
           ["You", ...Object.keys(agents)].includes(m.who) &&
-          typeof m.text === "string",
+          typeof m.text === "string" &&
+          (m.rating === undefined ||
+            m.rating === "Helpful" ||
+            m.rating === "Needs work"),
       ),
   );
   const [draft, setDraft] = useState(""),
@@ -101,9 +106,17 @@ export function TeamRoom() {
               <p>{m.text}</p>
             </article>
           ) : (
-            <AgentMessage key={i} agent={m.who}>
-              {m.text}
-            </AgentMessage>
+            <div key={i} className="agent-turn">
+              <AgentMessage agent={m.who}>{m.text}</AgentMessage>
+              <FeedbackBar
+                value={m.rating}
+                onRate={(rating) =>
+                  setMessages((old) =>
+                    old.map((item, j) => (i === j ? { ...item, rating } : item)),
+                  )
+                }
+              />
+            </div>
           ),
         )}
       </div>
