@@ -11,6 +11,7 @@ import {
   Copy,
   FileCheck2,
   Hexagon,
+  Info,
   Layers,
   LayoutGrid,
   Menu,
@@ -53,7 +54,13 @@ const sections = [
       ["review", "Review queue", FileCheck2],
     ],
   },
-  { title: "Resources", items: [["setup", "Getting started", BookOpen]] },
+  {
+    title: "Resources",
+    items: [
+      ["about", "About", Info],
+      ["setup", "Getting started", BookOpen],
+    ],
+  },
 ] as const;
 const pages = sections.flatMap((s) =>
   s.items.map(([id, title, icon]) => ({ id, title, icon, section: s.title })),
@@ -216,6 +223,18 @@ function Overview() {
               icon: Palette,
               desc: "Color, spacing, and shape tokens.",
             },
+            {
+              page: "about",
+              title: "About",
+              icon: Info,
+              desc: "How this system guides coding agents and handles exceptions.",
+            },
+            {
+              page: "setup",
+              title: "Getting started",
+              icon: BookOpen,
+              desc: "Connect MCP, run Storybook, or sync Figma.",
+            },
           ].map((x) => (
             <a href={"#" + x.page} key={x.page}>
               <x.icon size={22} />
@@ -284,6 +303,221 @@ function Foundations() {
     </div>
   );
 }
+function About() {
+  const stack: Array<{
+    name: string;
+    file: string;
+    role: string;
+    status: Status;
+  }> = [
+    {
+      name: "Component manifest over MCP",
+      file: "src/catalog.json · mcp/server.mjs",
+      role: "Machine-readable component list, props, examples, and tokens served over MCP so agents read structured JSON instead of guessing.",
+      status: "Ready",
+    },
+    {
+      name: "Workflow recipe (SKILL.md)",
+      file: "skills/relay-ui/SKILL.md",
+      role: "Step-by-step instructions loaded when an agent builds UI: inspect components first, read tokens, then compose screens.",
+      status: "Ready",
+    },
+    {
+      name: "Live docs site",
+      file: "GitHub Pages · Storybook",
+      role: "The real rendered components in the browser. Instead of reviewing screenshots or Figma handoffs, I review the live product here.",
+      status: "Ready",
+    },
+    {
+      name: "Agent routing (AGENTS.md / CLAUDE.md)",
+      file: "Planned · < 150 lines",
+      role: "Top-level repo rules splitting hard constraints (tokens and JSON — never override) from soft guidance, telling agents to ask rather than invent.",
+      status: "In review",
+    },
+    {
+      name: "Visual identity & exceptions (DESIGN.md · rules/)",
+      file: "Planned · Markdown + JSON checks",
+      role: "Condensed brand taste in prose, a managed list of edge-case exceptions, and automated checks to catch stray hardcoded hex values.",
+      status: "In review",
+    },
+  ];
+  return (
+    <div className="doc-stack">
+      <section className="spec">
+        <h2>Whoever writes the agent files designs the product</h2>
+        <div className="about-callout">
+          <strong>TL;DR:</strong> Relay Kit is not an AI agent itself — it is my
+          design system built <em>for</em> coding agents. Whoever maintains the
+          rules, tokens, and components inside this repository shapes every
+          screen an agent builds.
+        </div>
+        <div className="about-copy">
+          <p>
+            Traditional design systems spent most of their energy on adoption:
+            building components in Figma, writing long docs, and gently
+            reminding people not to rebuild buttons from scratch.
+          </p>
+          <p>
+            With coding agents writing more of the UI, adoption works
+            differently. Agents do not need convincing — they follow whatever
+            the repository tells them. Owning the files agents read means I can
+            focus on product taste, system coherence, and the tricky edge cases
+            instead of chasing handoffs.
+          </p>
+        </div>
+      </section>
+
+      <section className="spec">
+        <h2>The stack: JSON for machines, Markdown for judgment</h2>
+        <p>
+          Every decision in Relay Kit gets sorted with one question: is it
+          objective or subjective? Checkable facts (tokens, props, component
+          schemas) belong in structured data and CSS variables. Guidance about{" "}
+          <em>when</em> and <em>why</em> to use them belongs in prose.
+        </p>
+        <div className="about-stack">
+          {stack.map((item) => (
+            <div className="about-row" key={item.name}>
+              <div>
+                <strong>{item.name}</strong>
+                <code>{item.file}</code>
+                <p>{item.role}</p>
+              </div>
+              <StatusPill status={item.status} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="spec">
+        <h2>My workflow: design in the live site, own one write path</h2>
+        <p>
+          Instead of splitting colors, specs, and code across disconnected
+          tools, everything changes together here in one place.
+        </p>
+        <ol className="about-steps">
+          <li>
+            <strong>Review what is real:</strong> I open this live site (and
+            Storybook) to check how components actually look and feel — and
+            review the diff of whatever changed underneath.
+          </li>
+          <li>
+            <strong>Keep one source of truth:</strong> Updating{" "}
+            <code>src/tokens.css</code> updates the live app, flows immediately
+            to coding agents via MCP (<code>get_tokens</code>), and regenerates
+            the Figma library via <code>npm run figma</code>.
+          </li>
+          <li>
+            <strong>Add components end-to-end:</strong> A new component like{" "}
+            <code>FeedbackBar</code> ships with its React code, token styles,
+            Storybook states, and <code>src/catalog.json</code> entry in one
+            commit so nothing drifts out of sync.
+          </li>
+          <li>
+            <strong>Share live URLs, not screenshots:</strong> Pushing to{" "}
+            <code>main</code> auto-deploys this site, giving everyone a single
+            working link to inspect together.
+          </li>
+        </ol>
+      </section>
+
+      <section className="spec">
+        <h2>Rules are easy. Exceptions are the real job.</h2>
+        <p>
+          Agents are great at following rules — sometimes too great. Left alone,
+          an agent will either apply a rule where it breaks down, or spot a
+          single special case and copy it everywhere across the app.
+        </p>
+        <div className="about-copy">
+          <p>
+            To keep that from happening, every rule in Relay Kit explains its{" "}
+            <strong>why</strong>, and every intentional exception gets recorded
+            with whether it is allowed to spread. Agents may read exceptions and
+            flag new edge cases, but never invent exceptions on their own.
+          </p>
+        </div>
+        <div className="about-grid">
+          <div className="about-card">
+            <strong>Decline &amp; irreversible actions skip --pine</strong>
+            <p>
+              <strong>Applies to:</strong> ReviewItem decline buttons and
+              destructive confirmations.
+            </p>
+            <p>
+              <strong>Why:</strong> Primary brand emphasis belongs on safe
+              forward progress; declining or undoing work should stay visually
+              distinct so users pause before clicking.
+            </p>
+            <span className="about-rule-tag">Generalize: yes</span>
+          </div>
+          <div className="about-card">
+            <strong>StatusPill &amp; FeedbackBar use full pill radii</strong>
+            <p>
+              <strong>Applies to:</strong> Inline status badges and compact
+              message rating controls only.
+            </p>
+            <p>
+              <strong>Why:</strong> Rounded 20px pills separate lightweight
+              metadata and quick reactions from standard 7px action buttons and
+              12px cards.
+            </p>
+            <span className="about-rule-tag no">
+              Generalize: no · Keep buttons 7px
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="spec">
+        <h2>How Relay Kit grows (and what to watch out for)</h2>
+        <p>
+          Having one clear owner keeps a small system fast and coherent — and
+          writing every rule in the repo means design knowledge is never trapped
+          in one person’s head.
+        </p>
+        <div className="about-grid">
+          <div className="about-card">
+            <strong>Next upgrades as we grow</strong>
+            <ul>
+              <li>
+                Separate proposing from merging — engineers and agents open pull
+                requests while design approves.
+              </li>
+              <li>
+                Flag gaps instead of inventing tokens or one-off components.
+              </li>
+              <li>
+                Automate compliance checks to catch stray hex codes and
+                out-of-sync catalog entries.
+              </li>
+              <li>
+                Add shareable URL toggles so every experiment or product phase
+                has its own permanent link.
+              </li>
+            </ul>
+          </div>
+          <div className="about-card">
+            <strong>Where single-owner breaks</strong>
+            <ul>
+              <li>
+                Adding more designers requires shared review conventions so
+                taste disagreements do not become merge conflicts.
+              </li>
+              <li>
+                If flagged gaps sit unreviewed, the system becomes a bottleneck
+                for product teams.
+              </li>
+              <li>
+                AI-edited rule files can grow bloated or contradictory unless
+                every diff is reviewed and pruned regularly.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
 function Setup() {
   return (
     <div className="doc-stack">
@@ -339,6 +573,8 @@ const descriptions = {
   review: "Review proposed actions and record a decision for each one.",
   components: "Inspect the building blocks used throughout the templates.",
   foundations: "The shared values behind the Relay Kit interface.",
+  about:
+    "How I run Relay Kit as an agent-first design system — owning the rules, the exceptions, and the live site.",
   setup: "Run the kit locally and connect your design tools.",
   overview: "",
 };
@@ -485,6 +721,8 @@ function App() {
                 <TeamRoom />
               ) : page === "review" ? (
                 <ReviewQueue />
+              ) : page === "about" ? (
+                <About />
               ) : (
                 <Setup />
               )}
