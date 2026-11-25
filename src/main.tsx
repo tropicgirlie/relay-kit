@@ -10,7 +10,6 @@ import {
   Component,
   Copy,
   FileCheck2,
-  Hexagon,
   Info,
   Layers,
   LayoutGrid,
@@ -35,7 +34,7 @@ import {
   type Status,
 } from "./components";
 import { TeamRoom, ReviewQueue } from "./Templates";
-import { Artwork } from "./Artwork";
+import { Artwork, HeaderScene } from "./Artwork";
 import catalog from "./catalog.json";
 import tokens from "./tokens.css?raw";
 const sections = [
@@ -156,26 +155,31 @@ function Overview() {
         <span className="version">v0.1.0</span>
       </div>
       <section className="hero">
-        <div className="hero-grid" />
-        <Artwork />
         <div className="hero-copy">
           <div className="hero-tag">
             <Activity size={14} /> RELAY KIT
           </div>
           <h2>
-            Interfaces for
+            Human + agent
             <br />
-            agent teams<span>.</span>
+            design space<span>.</span>
           </h2>
           <p>
-            Reusable components and templates for
-            <br className="wide" /> collaborative AI workflows.
+            Expressive components, shared rules, and live templates
+            <br className="wide" /> for collaborative AI workflows.
           </p>
-          <a className="hero-button" href="#components">
-            <Boxes size={16} />
-            Explore components
-          </a>
+          <div className="hero-actions">
+            <a className="hero-button" href="#components">
+              <Boxes size={16} />
+              Explore components
+            </a>
+            <a className="hero-button secondary" href="#about">
+              <Info size={16} />
+              How it works
+            </a>
+          </div>
         </div>
+        <Artwork />
       </section>
       <section className="template-section">
         <div className="section-heading">
@@ -451,18 +455,17 @@ function About() {
             <span className="about-rule-tag">Generalize: yes</span>
           </div>
           <div className="about-card">
-            <strong>StatusPill &amp; FeedbackBar use full pill radii</strong>
+            <strong>AgentMark &amp; Brand use 14px squircles, not full circles</strong>
             <p>
-              <strong>Applies to:</strong> Inline status badges and compact
-              message rating controls only.
+              <strong>Applies to:</strong> Agent avatars and brand emblem only.
             </p>
             <p>
-              <strong>Why:</strong> Rounded 20px pills separate lightweight
-              metadata and quick reactions from standard 7px action buttons and
-              12px cards.
+              <strong>Why:</strong> Soft 14px squircles feel playful and
+              expressive while visually separating identities from full-pill
+              buttons, status chips, and 20px cards.
             </p>
             <span className="about-rule-tag no">
-              Generalize: no · Keep buttons 7px
+              Generalize: no · Keep buttons full pills
             </span>
           </div>
         </div>
@@ -699,7 +702,8 @@ function App() {
           <span className="separator">/</span>
           <b>{active.title}</b>
           <span className="header-end">
-            <Hexagon size={15} /> Workspace
+            <HeaderScene />
+            <span>Co-design workspace</span>
           </span>
         </header>
         <main id="main" tabIndex={-1}>
